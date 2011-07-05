@@ -244,6 +244,14 @@ nl80211_match_policy[NL80211_SCHED_SCAN_MATCH_ATTR_MAX + 1] = {
 						 .len = IEEE80211_MAX_SSID_LEN },
 };
 
+/* policy for GTK rekey offload attributes */
+static const struct nla_policy
+nl80211_rekey_policy[NUM_NL80211_REKEY_DATA] = {
+	[NL80211_REKEY_DATA_KEK] = { .len = NL80211_KEK_LEN },
+	[NL80211_REKEY_DATA_KCK] = { .len = NL80211_KCK_LEN },
+	[NL80211_REKEY_DATA_REPLAY_CTR] = { .len = NL80211_REPLAY_CTR_LEN },
+};
+
 /* ifidx get helper */
 static int nl80211_get_ifidx(struct netlink_callback *cb)
 {
