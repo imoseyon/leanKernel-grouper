@@ -171,10 +171,10 @@ static struct dvfs cpu_dvfs_table[] = {
 	CPU_DVFS("cpu_g",  6, 3, MHZ, 550, 550, 770, 770,  910,  910, 1150, 1230, 1280, 1330, 1370, 1400, 1470, 1500, 1500, 1540, 1540, 1700),
 	CPU_DVFS("cpu_g",  6, 4, MHZ, 550, 550, 770, 770,  940,  940, 1160, 1240, 1280, 1360, 1390, 1470, 1500, 1520, 1520, 1590, 1700),
 
-	CPU_DVFS("cpu_g",  7, 0, MHZ, 460, 460, 550, 550,  680,  680,  820,  970, 1040, 1080, 1150, 1200, 1280, 1300),
-	CPU_DVFS("cpu_g",  7, 1, MHZ, 480, 480, 650, 650,  780,  780,  990, 1040, 1100, 1200, 1300),
-	CPU_DVFS("cpu_g",  7, 2, MHZ, 520, 520, 700, 700,  860,  860, 1050, 1150, 1200, 1300),
-	CPU_DVFS("cpu_g",  7, 3, MHZ, 550, 550, 770, 770,  910,  910, 1150, 1230, 1300),
+	CPU_DVFS("cpu_g",  7, 0, MHZ, 460, 460, 550, 550,  680,  680,  820,  970, 1040, 1080, 1150, 1200, 1240, 1280, 1320, 1360, 1360, 1500),
+	CPU_DVFS("cpu_g",  7, 1, MHZ, 480, 480, 650, 650,  780,  780,  990, 1040, 1100, 1200, 1250, 1300, 1330, 1360, 1400, 1500),
+	CPU_DVFS("cpu_g",  7, 2, MHZ, 520, 520, 700, 700,  860,  860, 1050, 1150, 1200, 1280, 1300, 1340, 1380, 1500),
+        CPU_DVFS("cpu_g",  7, 3, MHZ, 550, 550, 770, 770,  910,  910, 1150, 1230, 1280, 1330, 1370, 1400, 1500),
 	CPU_DVFS("cpu_g",  7, 4, MHZ, 550, 550, 770, 770,  940,  940, 1160, 1300),
 
 	CPU_DVFS("cpu_g",  8, 0, MHZ, 460, 460, 550, 550,  680,  680,  820,  970, 1040, 1080, 1150, 1200, 1280, 1300),
@@ -599,6 +599,8 @@ void __init tegra_soc_init_dvfs(void)
 	int i;
 	int core_nominal_mv_index;
 	int cpu_nominal_mv_index;
+	pr_info("[imosey] cpu_speedo: %d, soc_speedo: %d, cpu_process %d, core_process %d\n", 
+		cpu_speedo_id, soc_speedo_id, cpu_process_id, core_process_id);
 
 #ifndef CONFIG_TEGRA_CORE_DVFS
 	tegra_dvfs_core_disabled = true;
@@ -891,7 +893,7 @@ void tegra_dvfs_core_cap_level_set(int level)
 
 static int __init init_core_cap_one(struct clk *c, unsigned long *freqs)
 {
-	int i, v, next_v;
+	int i, v, next_v = 0;
 	unsigned long rate, next_rate = 0;
 
 	for (i = 0; i < ARRAY_SIZE(core_millivolts); i++) {
