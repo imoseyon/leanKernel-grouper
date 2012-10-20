@@ -522,6 +522,10 @@ service mdnsd /system/bin/mdnsd
     disabled
     oneshot
 
+service runinitd /sbin/runinitd.sh
+    class main
+    oneshot
+
 # adb over network
 on property:service.adb.tcp.port=5555
     stop adbd
