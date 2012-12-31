@@ -2053,12 +2053,12 @@ static struct bfq_queue *bfq_get_queue(struct bfq_data *bfqd,
 static void bfq_update_io_thinktime(struct bfq_data *bfqd,
 				    struct cfq_io_context *cic)
 {
-	unsigned long elapsed = jiffies - cic->last_end_request;
+	unsigned long elapsed = jiffies - cic->ttime.last_end_request;
 	unsigned long ttime = min(elapsed, 2UL * bfqd->bfq_slice_idle);
 
-	cic->ttime_samples = (7*cic->ttime_samples + 256) / 8;
-	cic->ttime_total = (7*cic->ttime_total + 256*ttime) / 8;
-	cic->ttime_mean = (cic->ttime_total + 128) / cic->ttime_samples;
+	cic->ttime.ttime_samples = (7*cic->ttime.ttime_samples + 256) / 8;
+	cic->ttime.ttime_total = (7*cic->ttime.ttime_total + 256*ttime) / 8;
+	cic->ttime.ttime_mean = (cic->ttime.ttime_total + 128) / cic->ttime.ttime_samples;
 }
 
 static void bfq_update_io_seektime(struct bfq_data *bfqd,
@@ -2128,8 +2128,8 @@ static void bfq_update_idle_window(struct bfq_data *bfqd,
 		(bfqd->hw_tag && BFQQ_SEEKY(bfqq) &&
 			bfqq->raising_coeff == 1))
 		enable_idle = 0;
-	else if (bfq_sample_valid(cic->ttime_samples)) {
-		if (cic->ttime_mean > bfqd->bfq_slice_idle &&
+	else if (bfq_sample_valid(cic->ttime.ttime_samples)) {
+		if (cic->ttime.ttime_mean > bfqd->bfq_slice_idle &&
 			bfqq->raising_coeff == 1)
 			enable_idle = 0;
 		else
@@ -2270,7 +2270,7 @@ static void bfq_completed_request(struct request_queue *q, struct request *rq)
 		bfqd->sync_flight--;
 
 	if (sync)
-		RQ_CIC(rq)->last_end_request = jiffies;
+		RQ_CIC(rq)->ttime.last_end_request = jiffies;
 
 	/*
 	 * If this is the active queue, check if it needs to be expired,
