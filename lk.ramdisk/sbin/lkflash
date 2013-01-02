@@ -11,8 +11,6 @@ CUR=`$BB uname -a | $BB awk -F- '{ print \$4 }'`
 DEVICE=`$BB uname -a | $BB awk -F- '{ print \$3 }'`
 STABLE="http://imoseyon.host4droid.com/${subdir}/lkflash/${DEVICE}"
 
-$BB mkdir -p /sdcard/lk
-
 while [ 1 ]; do
 echo
 echo "leanKernel flasher"
@@ -27,7 +25,7 @@ echo -n "Please enter a number between 1 and 3 (or press enter to exit): "
 read option
 case $option in
   1)
-	$BB wget -q -O /sdcard/lk/loc $STABLE
+	$BB wget -q -O /sdcard/lk $STABLE
 	echo; echo -n "Downloading stable "
 	break
 	;;
