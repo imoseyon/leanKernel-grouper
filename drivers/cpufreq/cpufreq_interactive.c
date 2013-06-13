@@ -593,7 +593,7 @@ static void cpufreq_interactive_boost(void)
 
 static void cpufreq_interactive_core_lock_timer(unsigned long data)
 {
-	queue_work(down_wq, &core_lock.unlock_work);
+	queue_work(inputopen_wq, &core_lock.unlock_work);
 }
 
 static void cpufreq_interactive_unlock_cores(struct work_struct *wq)
