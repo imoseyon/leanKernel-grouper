@@ -9,7 +9,7 @@ subdir="grouper"
 
 CUR=`$BB uname -a | $BB awk -F- '{ print \$4 }'`
 DEVICE=`$BB uname -a | $BB awk -F- '{ print \$3 }'`
-STABLE="http://imoseyon.host4droid.com/${subdir}/lkflash/${DEVICE}"
+STABLE="http://androtransfer.com/get.php?p=imoseyon/${subdir}/lkflash/${DEVICE}"
 
 while [ 1 ]; do
 echo
@@ -25,7 +25,7 @@ echo -n "Please enter a number between 1 and 3 (or press enter to exit): "
 read option
 case $option in
   1)
-	$BB wget -q -O /sdcard/lk $STABLE
+	$BB wget -q -O /sdcard/lk "${STABLE}&directserve=1"
 	echo; echo -n "Downloading stable "
 	break
 	;;
@@ -34,7 +34,7 @@ case $option in
 	;;
   3) 
   	echo "Please wait..."
-	vstable=`$BB wget -q -O - $STABLE | $BB awk '{ print \$3 }'`
+	vstable=`$BB wget -q -O - "${STABLE}&directserve=1" | $BB awk '{ print \$3 }'`
 	echo; echo ">>> Current version: $CUR, Latest stable: $vstable"	
 	sleep 2
 	;;
