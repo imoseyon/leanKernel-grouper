@@ -243,3 +243,12 @@
 /sys/devices/tegradc\.1(/.*)?                u:object_r:sysfs_devices_tegradc:s0
 /sys/devices/platform/bcm4330_rfkill/rfkill/rfkill0/state   --  u:object_r:sysfs_bluetooth_writable:s0
 /sys/devices/platform/bcm4330_rfkill/rfkill/rfkill0/type    --  u:object_r:sysfs_bluetooth_writable:s0
+#line 1 "vendor/cm/sepolicy/file_contexts"
+/cache/dalvik-cache(/.*)? u:object_r:dalvikcache_data_file:s0
+
+#############################
+# performance-related sysfs files (CM)
+/sys/kernel/mm/ksm(/.*)?       --          u:object_r:sysfs_writable:s0
+/sys/devices/system/cpu.*/cpufreq(/.*)? --  u:object_r:sysfs_writable:s0
+/sys/block/mmcblk0/queue/scheduler  --    u:object_r:sysfs_writable:s0
+
