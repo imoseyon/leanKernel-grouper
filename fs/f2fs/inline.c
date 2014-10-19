@@ -52,11 +52,10 @@ int f2fs_read_inline_data(struct inode *inode, struct page *page)
 
 	/* Copy the whole inline data block */
 	src_addr = inline_data_addr(ipage);
-	dst_addr = kmap(page);
+	dst_addr = kmap_atomic(page);
 	memcpy(dst_addr, src_addr, MAX_INLINE_DATA);
-	kunmap(page);
+	kunmap_atomic(dst_addr);
 	f2fs_put_page(ipage, 1);
-
 out:
 	SetPageUptodate(page);
 	unlock_page(page);
@@ -102,9 +101,9 @@ static int __f2fs_convert_inline_data(struct inode *inode, struct page *page)
 
 	/* Copy the whole inline data block */
 	src_addr = inline_data_addr(ipage);
-	dst_addr = kmap(page);
+	dst_addr = kmap_atomic(page);
 	memcpy(dst_addr, src_addr, MAX_INLINE_DATA);
-	kunmap(page);
+	kunmap_atomic(dst_addr);
 	SetPageUptodate(page);
 
 	/* write data page to try to make data consistent */
@@ -166,10 +165,10 @@ int f2fs_write_inline_data(struct inode *inode,
 	f2fs_wait_on_page_writeback(ipage, NODE);
 	zero_user_segment(ipage, INLINE_DATA_OFFSET,
 				 INLINE_DATA_OFFSET + MAX_INLINE_DATA);
-	src_addr = kmap(page);
+	src_addr = kmap_atomic(page);
 	dst_addr = inline_data_addr(ipage);
 	memcpy(dst_addr, src_addr, size);
-	kunmap(page);
+	kunmap_atomic(src_addr);
 
 	/* Release the first data block if it is allocated */
 	if (!f2fs_has_inline_data(inode)) {
@@ -254,3 +253,4 @@ process_inline:
 	}
 	return false;
 }
+
