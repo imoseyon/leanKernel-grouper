@@ -141,7 +141,7 @@ static inline bool need_do_checkpoint(struct inode *inode)
 	return need_cp;
 }
 
-int f2fs_sync_file(struct file *file, int datasync)
+int f2fs_sync_file(struct file *file, loff_t start, loff_t end, int datasync)
 {
 	struct inode *inode = file->f_mapping->host;
 	struct f2fs_inode_info *fi = F2FS_I(inode);
@@ -158,6 +158,12 @@ int f2fs_sync_file(struct file *file, int datasync)
 		return 0;
 
 	trace_f2fs_sync_file_enter(inode);
+
+	ret = filemap_write_and_wait_range(inode->i_mapping, start, end);
+	if (ret) {
+		trace_f2fs_sync_file_exit(inode, need_cp, datasync, ret);
+		return ret;
+	}
 
 	/*
 	 * if there is no written data, don't waste time to write recovery info.

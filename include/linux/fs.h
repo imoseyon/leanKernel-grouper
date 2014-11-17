@@ -1590,10 +1590,13 @@ struct file_operations {
 			  loff_t len);
 };
 
+#define IPERM_FLAG_RCU  0x0001
+
 struct inode_operations {
 	struct dentry * (*lookup) (struct inode *,struct dentry *, struct nameidata *);
 	void * (*follow_link) (struct dentry *, struct nameidata *);
 	int (*permission) (struct inode *, int);
+	int (*check_acl)(struct inode *, int, unsigned int);
 	struct posix_acl * (*get_acl)(struct inode *, int);
 
 	int (*readlink) (struct dentry *, char __user *,int);
@@ -2252,6 +2255,7 @@ static inline bool execute_ok(struct inode *inode)
  * use {get,deny}_write_access() - these functions check the sign and refuse
  * to do the change if sign is wrong.
  */
+/*
 static inline int get_write_access(struct inode *inode)
 {
 	return atomic_inc_unless_negative(&inode->i_writecount) ? 0 : -ETXTBSY;
@@ -2261,6 +2265,7 @@ static inline int deny_write_access(struct file *file)
 	struct inode *inode = file->f_path.dentry->d_inode;
 	return atomic_dec_unless_positive(&inode->i_writecount) ? 0 : -ETXTBSY;
 }
+*/
 static inline struct inode *file_inode(struct file *f)
 {
 	return f->f_path.dentry->d_inode;
