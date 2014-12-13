@@ -31,7 +31,10 @@ on early-boot
 
 on fs
     setprop ro.crypto.umount_sd false
-    mount_all /fstab.grouper
+    mount_all /fstab.lk
+    wait /dev/block/platform/sdhci-tegra.3/by-name/APP
+    mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/APP /system ro noatime barrier=0,noauto_da_alloc,data=writeback
+    mount f2fs /dev/block/platform/sdhci-tegra.3/by-name/APP /system ro noatime nosuid nodev discard,inline_xattr
     wait /dev/block/platform/sdhci-tegra.3/by-name/CAC
     mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/CAC /cache noatime nosuid nodev discard,nomblk_io_submit,noauto_da_alloc,errors=continue
     mount f2fs /dev/block/platform/sdhci-tegra.3/by-name/CAC /cache noatime nosuid nodev discard,inline_xattr
