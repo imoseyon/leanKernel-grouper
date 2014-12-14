@@ -94,3 +94,5 @@ static inline void prandom32_seed(struct rnd_state *state, u64 seed)
 #endif /* __KERNEL___ */
 
 #endif /* _LINUX_RANDOM_H */
+
+void erandom_get_random_bytes(char *buf, size_t count);
